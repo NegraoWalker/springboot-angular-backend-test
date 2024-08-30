@@ -21,11 +21,11 @@ public class EmployeeService {
     }
 
     public Employee findByIdEmployee(Long id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+        return employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Funcionário não existe com id:" + id));
     }
 
     public Employee updateEmployee(Long id, Employee employeeDetails) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Funcionário não existe com id:" + id));
 
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
@@ -36,7 +36,7 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(Long id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Funcionário não existe com id:" + id));
         employeeRepository.delete(employee);
     }
 }
