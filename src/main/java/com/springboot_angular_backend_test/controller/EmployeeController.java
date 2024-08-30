@@ -6,6 +6,7 @@ import com.springboot_angular_backend_test.model.Employee;
 import com.springboot_angular_backend_test.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,34 +22,33 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/employees")
-    public List<Employee> getAllEmployees(){
-        return employeeService.findAllEmployee();
+    public ResponseEntity<List<Employee>> getAllEmployees(){
+        List<Employee> employees =  employeeService.findAllEmployee();
+        return ResponseEntity.status(HttpStatus.OK).body(employees);
     }
 
     @PostMapping("/employees")
-    public Employee createEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
-        return employeeService.saveEmployee(EmployeeMapper.toEmployee(employeeDto));
+    public ResponseEntity<Employee> createEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
+        Employee employee = employeeService.saveEmployee(EmployeeMapper.toEmployee(employeeDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
     }
 
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.findByIdEmployee(id);
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(employee);
     }
 
     @PutMapping("/employees/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeDto employeeDetailsDto){
         Employee updatedEmployee = employeeService.updateEmployee(id, EmployeeMapper.toEmployee(employeeDetailsDto));
-        return ResponseEntity.ok(updatedEmployee);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedEmployee);
     }
 
     @DeleteMapping("/employees/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Long id){
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id){
         employeeService.deleteEmployee(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
 }
